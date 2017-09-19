@@ -6,20 +6,20 @@
 import React from 'react';
 import { AppRegistry, View } from 'react-native';
 
-import { CreateRootNavigator } from "./app/router";
+import { Tabs } from "./src/TabRouter";
 
 
 export default class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-     isLoading: true
+      isLoading: true
     };
   }
 
   componentDidMount() {
     this.setState({
-     isLoading: false
+      isLoading: false
     });
   }
 
@@ -27,13 +27,11 @@ export default class App extends React.Component {
     if (this.state.isLoading) {
       return (<View></View>);
     }
-    return <CreateRootNavigator />; // login 기능 구현한 다음에 수정
+    return <Tabs />; // login 기능 구현한 다음에 수정
   }
 }
 
 AppRegistry.registerComponent('PixeliteCli', () => App);
-
-
 
 // import React, { Component } from 'react';
 // import {
