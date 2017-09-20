@@ -6,7 +6,6 @@ import firebase from 'firebase';
 import ReduxThunk from 'redux-thunk'; // middleware
 import reducers from './src/reducers'; // getting combined reducers
 import Router from './src/Router';
-import { Tabs } from './src/TabRouter';
 
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(reducers, /* preloadedState, */ composeEnhancers(
@@ -48,3 +47,30 @@ class App extends Component {
 }
 
 export default App;
+
+// jenimotion index.ios.js
+
+// import { Tabs } from "./src/TabRouter";
+//
+//
+// export default class App extends React.Component {
+//   constructor(props) {
+//     super(props);
+//     this.state = {
+//       isLoading: true
+//     };
+//   }
+//
+//   componentDidMount() {
+//     this.setState({
+//       isLoading: false
+//     });
+//   }
+//
+//   render() {
+//     if (this.state.isLoading) {
+//       return (<View></View>);
+//     }
+//     return <Tabs />; // login 기능 구현한 다음에 수정
+//   }
+// }

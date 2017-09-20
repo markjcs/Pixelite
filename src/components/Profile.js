@@ -1,7 +1,10 @@
-import React from "react";
+import React, { Component } from "react";
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import * as ProfileActions from '../actions';
 import { StyleSheet, View, ScrollView, Text, Image, Dimensions, TouchableOpacity } from "react-native";
-import { Icon } from 'react-native-elements';
 import MapView from 'react-native-maps';
+import { MapIcon, SettingIcon, CalendarIcon, LocationIcon } from './icons/Icons';
 
 const IMAGE_URLS = [
   {uri: "https://s3.us-east-2.amazonaws.com/coderaising-cs/38824_1.jpg"},
@@ -33,9 +36,8 @@ function randomColor() {
 }
 
 const windowWidth = Dimensions.get('window').width - 36;
-var IMAGES_PER_ROW = 4;
 
-export default class Profile extends React.Component {
+class Profile extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -46,12 +48,12 @@ export default class Profile extends React.Component {
         longitudeDelta: LONGITUDE_DELTA,
       },
       markers: [],
-      image: null
+      image: null,
     };
   }
 
   calculatedSize(length) {
-    return {width: windowWidth / length, height: windowWidth / 5}
+    return { width: windowWidth / length, height: windowWidth / 5 }
   }
 
   renderRandomChunk(imagesArr) {
@@ -84,11 +86,28 @@ export default class Profile extends React.Component {
   renderImagesInGroups() {
     return this.renderRandomChunk(IMAGE_URLS).map((imagesForRow, i) => {
       return (
-        <View style={{margin: 0, flexDirection: "row"}} key={i}>
+        <View style={{ margin: 0, flexDirection: "row" }} key={i}>
           {this.renderRow(imagesForRow)}
         </View>
       )
     })
+  }
+
+  renderStories() {
+    return (
+      <View style={{ marginBottom: 25 }}>
+        <View style={{ marginBottom: 6, borderRadius: 10, overflow: 'hidden' }}>
+          {this.renderImagesInGroups()}
+        </View>
+        <Text style={{ color: '#565656', fontFamily: 'Avenir', fontSize: 15, fontWeight: 'bold'}}>Backpacking in Australia</Text>
+        <View style={{marginTop: 4, flexDirection: "row"}}>
+          <CalendarIcon />
+          <Text style={{ color: 'grey', fontFamily: 'Avenir', fontSize: 10, marginRight: 10}}>July 16-21</Text>
+          <LocationIcon />
+          <Text style={{ color: 'grey', fontFamily: 'Avenir', fontSize: 10}}>Sydney, Australia</Text>
+        </View>
+      </View>
+    )
   }
 
   onMapPress(e) {
@@ -106,33 +125,21 @@ export default class Profile extends React.Component {
 
   render() {
     return (
-      <View style={{ flex: 1, paddingTop: 25, backgroundColor: "white" }}>
-        <View style={{ margin: 8, alignSelf: "flex-end", flexDirection: "row" }}>
-          <Icon type='simple-line-icon' name="map" size={23} color="grey" style={{ marginRight: 14 }}/>
-          <Icon type='simple-line-icon' name="settings" size={23} color="grey" style={{ marginRight: 7 }}/>
+      <View style={styles.profileScreen}>
+        <View style={styles.profileMenu}>
+          <MapIcon />
+          <SettingIcon />
         </View>
-        <View
-          style={{
-            alignItems: "center",
-            justifyContent: "center",
-            alignSelf: "center",
-            marginBottom: 20
-          }}
-        >
+        <View style={styles.profile}>
           <Image
-            style={{
-              margin: 10,
-              height: 120,
-              width: 120,
-              borderRadius: 60
-            }}
+            style={styles.profileImage}
             source={{uri:'https://s3.us-east-2.amazonaws.com/coderaising-cs/KakaoTalk_Photo_2017-03-27-14-38-15.jpeg'}}
             resizeMode="cover"
           />
-          <Text style={{ color: '#565656', fontFamily: 'Avenir', fontSize: 17, fontWeight: 'bold' }}>Jenny Hong</Text>
+          <Text style={styles.profileName}>Jenny Hong</Text>
         </View>
 
-        <ScrollView style={{ marginLeft: 18, marginRight: 18}}>
+        <ScrollView style={styles.scrollView}>
           <View style={styles.container}>
             <MapView
               provider={this.props.provider}
@@ -150,45 +157,10 @@ export default class Profile extends React.Component {
               ))}
             </MapView>
           </View>
+          {this.props.stories.map((story) => {
+            this.renderStories(story);
 
-          <View style={{ marginBottom: 25 }}>
-            <View style={{ marginBottom: 6, borderRadius: 10, overflow: 'hidden' }}>
-              {this.renderImagesInGroups()}
-            </View>
-            <Text style={{ color: '#565656', fontFamily: 'Avenir', fontSize: 15, fontWeight: 'bold'}}>Backpacking in Australia</Text>
-            <View style={{marginTop: 4, flexDirection: "row"}}>
-              <Icon type='simple-line-icon' name="calendar" size={15} color="grey" style={{ marginRight: 5 }}/>
-              <Text style={{ color: 'grey', fontFamily: 'Avenir', fontSize: 10, marginRight: 10}}>July 16-21</Text>
-              <Icon type='simple-line-icon' name="location-pin" size={15} color="grey" style={{ marginRight: 5}}/>
-              <Text style={{ color: 'grey', fontFamily: 'Avenir', fontSize: 10}}>Sydney, Australia</Text>
-            </View>
-          </View>
-
-          <View style={{ marginBottom: 25 }}>
-            <View style={{ marginBottom: 6, borderRadius: 10, overflow: 'hidden' }}>
-              {this.renderImagesInGroups()}
-            </View>
-            <Text style={{ color: '#565656', fontFamily: 'Avenir', fontSize: 15, fontWeight: 'bold'}}>Jeju with besties</Text>
-            <View style={{marginTop: 4, flexDirection: "row"}}>
-              <Icon type='simple-line-icon' name="calendar" size={15} color="grey" style={{ marginRight: 5 }}/>
-              <Text style={{ color: 'grey', fontFamily: 'Avenir', fontSize: 10, marginRight: 10}}>Aug 5-8</Text>
-              <Icon type='simple-line-icon' name="location-pin" size={15} color="grey" style={{ marginRight: 5}}/>
-              <Text style={{ color: 'grey', fontFamily: 'Avenir', fontSize: 10}}>Jeju, South Korea</Text>
-            </View>
-          </View>
-
-          <View style={{ marginBottom: 20 }}>
-            <View style={{ marginBottom: 6, borderRadius: 10, overflow: 'hidden' }}>
-              {this.renderImagesInGroups()}
-            </View>
-            <Text style={{ color: '#565656', fontFamily: 'Avenir', fontSize: 15, fontWeight: 'bold'}}>All of the foods in Japan</Text>
-            <View style={{marginTop: 4, flexDirection: "row"}}>
-              <Icon type='simple-line-icon' name="calendar" size={15} color="grey" style={{ marginRight: 5 }}/>
-              <Text style={{ color: 'grey', fontFamily: 'Avenir', fontSize: 10, marginRight: 10}}>Mar 21-28</Text>
-              <Icon type='simple-line-icon' name="location-pin" size={15} color="grey" style={{ marginRight: 5}}/>
-              <Text style={{ color: 'grey', fontFamily: 'Avenir', fontSize: 10}}>Tokyo, Japan</Text>
-            </View>
-          </View>
+          })}
         </ScrollView>
       </View>
     );
@@ -196,6 +168,38 @@ export default class Profile extends React.Component {
 }
 
 const styles = StyleSheet.create({
+  profileScreen: {
+    flex: 1,
+    paddingTop: 25,
+    backgroundColor: 'white',
+  },
+  profileMenu: {
+    margin: 8,
+    alignSelf: 'flex-end',
+    flexDirection: 'row',
+  },
+  profile: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    marginBottom: 20,
+  },
+  profileImage: {
+    margin: 10,
+    height: 120,
+    width: 120,
+    borderRadius: 60,
+  },
+  profileName: {
+    color: '#565656',
+    fontFamily: 'Avenir',
+    fontSize: 17,
+    fontWeight: 'bold',
+  },
+  scrollView: {
+    marginLeft: 18,
+    marginRight: 18,
+  },
   container: {
     width: windowWidth,
     height: 280,
@@ -206,25 +210,13 @@ const styles = StyleSheet.create({
   map: {
     ...StyleSheet.absoluteFillObject,
   },
-  bubble: {
-    backgroundColor: 'rgba(255,255,255,0.7)',
-    paddingHorizontal: 18,
-    paddingVertical: 12,
-    borderRadius: 20,
-  },
-  latlng: {
-    width: 200,
-    alignItems: 'stretch',
-  },
-  button: {
-    width: 80,
-    paddingHorizontal: 12,
-    alignItems: 'center',
-    marginHorizontal: 10,
-  },
-  buttonContainer: {
-    flexDirection: 'row',
-    marginVertical: 20,
-    backgroundColor: 'transparent',
-  },
 });
+
+const mapStateToProps = ({ profile }) => {
+  const { stories, selectedStory, isShowingMap } = profile;
+  return { stories, selectedStory, isShowingMap };
+};
+const matchDispatchToProps = dispatch =>
+  bindActionCreators(ProfileActions, dispatch);
+
+export default connect(mapStateToProps, matchDispatchToProps)(Profile);
