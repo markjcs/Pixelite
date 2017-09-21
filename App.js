@@ -13,17 +13,6 @@ const store = createStore(reducers, /* preloadedState, */ composeEnhancers(
 ));
 
 class App extends Component {
-  // constructor(props) {
-  //   super(props);
-  //   this.state = {
-  //     isLoading: true
-  //   };
-  // }
-  // componentDidMount() {
-  //   this.setState({
-  //     isLoading: false
-  //   });
-  // }
   componentWillMount() {
     const config = {
       apiKey: 'AIzaSyDscedGD6dyCL7cZ56kWOvz0LsXMjp4cyU',
@@ -33,11 +22,9 @@ class App extends Component {
       storageBucket: '',
       messagingSenderId: '372117802073',
     };
-
     firebase.initializeApp(config);
   }
   render() {
-    // const store = createStore(reducers, {}, applyMiddleware(ReduxThunk));
     return (
       <Provider store={store}>
         <Router />
@@ -47,30 +34,3 @@ class App extends Component {
 }
 
 export default App;
-
-// jenimotion index.ios.js
-
-// import { Tabs } from "./src/TabRouter";
-//
-//
-// export default class App extends React.Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = {
-//       isLoading: true
-//     };
-//   }
-//
-//   componentDidMount() {
-//     this.setState({
-//       isLoading: false
-//     });
-//   }
-//
-//   render() {
-//     if (this.state.isLoading) {
-//       return (<View></View>);
-//     }
-//     return <Tabs />; // login 기능 구현한 다음에 수정
-//   }
-// }

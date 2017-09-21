@@ -1,50 +1,75 @@
 import React from 'react';
 import { StyleSheet, View, ScrollView, Text, TextInput, Image, TouchableOpacity, NativeModules, CameraRoll } from 'react-native';
 import { Icon } from 'react-native-elements';
+import { RNS3 } from 'react-native-aws3';
+import { API_KEY, API_SECRET } from 'react-native-dotenv'
+import * as firebase from 'firebase';
 // import Exif from 'react-native-exif';
-// import MediaMeta from 'react-native-media-meta';
-var ImagePicker = NativeModules.ImageCropPicker;
-// var SingleImagePicker = require('react-native-image-picker');
-
 import FloatingLabelInput from '../components/common/FloatingLabelInput';
 
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     justifyContent: 'center',
-//     alignItems: 'center'
-//   },
-//   button: {
-//     backgroundColor: 'blue',
-//     marginBottom: 10
-//   },
-//   text: {
-//     color: 'white',
-//     fontSize: 20,
-//     textAlign: 'center'
-//   }
-// });
+const ImagePicker = NativeModules.ImageCropPicker;
+console.log(RNS3);
 
+// arn:aws:s3:::pixelite-s3bucket-dev
+const options = {
+  keyPrefix: "uploads/",
+  bucket: "pixelite-s3bucket-dev",
+  region: "ap-northeast-2",
+  accessKey: API_KEY,
+  secretKey: API_SECRET,
+  successActionStatus: 201
+}
+
+  /**
+   * {
+   *   postResponse: {
+   *     bucket: "your-bucket",
+   *     etag : "9f620878e06d28774406017480a59fd4",
+   *     key: "uploads/image.png",
+   *     location: "https://your-bucket.s3.amazonaws.com/uploads%2Fimage.png"
+   *   }
+   * }
+   */
 export default class NewStory extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       value: '',
       image: null,
-      images: null
+      images: null,
+      user: null,
     }
   }
+  componentDidMount() {
+    const user = firebase.auth().currentUser.uid;
+    this.setState({ user: user });
+  }
 
-  handleTextChange = (newText) => this.setState({ value: newText });
+  handleTextChange = newText => this.setState({ value: newText });
+  saveImageToS3(uri) {
+    const file = {
+      // `uri` can also be a file system path (i.e. file://)
+      uri: `file://${uri}`,
+      name: `${this.state.user}-${uri.slice(uri.lastIndexOf('/') + 1)}`,
+      type: "image/jpg"
+    }
+    RNS3.put(file, options).then(response => {
+      if (response.status !== 201)
+        throw new Error("Failed to upload image to S3");
+      console.log(response.body);
+    });
+  }
 
   pickMultiple() {
     ImagePicker.openPicker({
       multiple: true,
       waitAnimationEnd: false
     }).then(images => {
+
       this.setState({
         images: images.map(i => {
           console.log('received image', i);
+          this.saveImageToS3(i.path);
           return {uri: i.path, width: i.width, height: i.height, mime: i.mime};
         })
       });

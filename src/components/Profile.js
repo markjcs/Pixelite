@@ -65,26 +65,26 @@ class Profile extends Component {
     while (sum < length) {
       const willAdd = Math.floor(Math.random() * 3) + 2;
       const tuple = [];
-      for (let i = 0; i < willAdd; i++) {
-        if (array[i]) { tuple.push(array[i]) }
+      for (let i = 0; i < willAdd; i += 1) {
+        if (array[i]) tuple.push(array[i]);
       }
-      if (tuple.length > 0) { result.push(tuple) }
+      if (tuple.length > 0) result.push(tuple);
       array.splice(0, willAdd);
       sum += willAdd;
     }
-   return result;
+    return result;
   }
 
   renderRow(images) {
-    return images.map((uri, i) =>{
-      return(
-        <Image key={i} style={[{margin: 0}, this.calculatedSize(images.length)]} source={uri} />
+    return images.map((image, i) => {
+      return (
+        <Image key={i} style={[{margin: 0}, this.calculatedSize(images.length)]} source={{ uri: image.uri }} />
       );
-    })
+    });
   }
 
-  renderImagesInGroups() {
-    return this.renderRandomChunk(IMAGE_URLS).map((imagesForRow, i) => {
+  renderImagesInGroups(images) {
+    return this.renderRandomChunk(images).map((imagesForRow, i) => {
       return (
         <View style={{ margin: 0, flexDirection: "row" }} key={i}>
           {this.renderRow(imagesForRow)}
@@ -93,11 +93,11 @@ class Profile extends Component {
     })
   }
 
-  renderStories() {
+  renderStories(story) {
     return (
       <View style={{ marginBottom: 25 }}>
         <View style={{ marginBottom: 6, borderRadius: 10, overflow: 'hidden' }}>
-          {this.renderImagesInGroups()}
+          {this.renderImagesInGroups(story.images)}
         </View>
         <Text style={{ color: '#565656', fontFamily: 'Avenir', fontSize: 15, fontWeight: 'bold'}}>Backpacking in Australia</Text>
         <View style={{marginTop: 4, flexDirection: "row"}}>
@@ -108,6 +108,9 @@ class Profile extends Component {
         </View>
       </View>
     )
+  }
+  onMapIconPress (e) {
+    this.props.profileShowMap();
   }
 
   onMapPress(e) {
@@ -127,7 +130,10 @@ class Profile extends Component {
     return (
       <View style={styles.profileScreen}>
         <View style={styles.profileMenu}>
-          <MapIcon />
+          <TouchableOpacity onPress={(e) => { this.onMapIconPress(e) }}>
+            <MapIcon />
+          </TouchableOpacity>
+
           <SettingIcon />
         </View>
         <View style={styles.profile}>
@@ -141,21 +147,23 @@ class Profile extends Component {
 
         <ScrollView style={styles.scrollView}>
           <View style={styles.container}>
-            <MapView
-              provider={this.props.provider}
-              style={styles.map}
-              initialRegion={this.state.region}
-              onPress={(e) => this.onMapPress(e)}
-            >
-              {this.state.markers.map((marker, i) => (
-                <MapView.Marker
-                  key={marker.key}
-                  coordinate={marker.coordinate}
-                  pinColor={marker.color}
-                  key={i}
-                />
-              ))}
-            </MapView>
+            {this.props.isShowingMap &&
+              <MapView
+                provider={this.props.provider}
+                style={styles.map}
+                initialRegion={this.state.region}
+                onPress={(e) => this.onMapPress(e)}
+              >
+                {this.state.markers.map((marker, i) => (
+                  <MapView.Marker
+                    key={marker.key}
+                    coordinate={marker.coordinate}
+                    pinColor={marker.color}
+                    key={i}
+                  />
+                ))}
+              </MapView>
+            }
           </View>
           {this.props.stories.map((story) => {
             this.renderStories(story);

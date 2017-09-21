@@ -31,6 +31,7 @@ const signUpUserSuccess = (dispatch, user) => {
 
 // dispatch helper function
 const loginUserSuccess = (dispatch, user) => {
+  console.log('users', user.uid);
   dispatch({
     type: LOGIN_USER_SUCCESS,
     payload: user,
