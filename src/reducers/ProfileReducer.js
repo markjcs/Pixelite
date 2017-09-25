@@ -4,6 +4,7 @@ import {
   PROFILE_SHOW_MAP,
   // PROFILE_MAP_CHANGED,
   PROFILE_STORY_SELECTED,
+  NEWSTORY_UPDATED_STORIES,
 } from '../actions/types';
 
 const INITIAL_STATE = {
@@ -36,6 +37,10 @@ export default (state = INITIAL_STATE, action) => {
       return { ...state, isShowingMap: !state.isShowingMap };
     case PROFILE_STORY_SELECTED:
       return { ...state, selectedStory: action.payload };
+    case NEWSTORY_UPDATED_STORIES:
+      console.log("received updated storeis");
+      console.log(action.payload);
+      return { ...state, stories: action.payload };
     default:
       return state;
   }

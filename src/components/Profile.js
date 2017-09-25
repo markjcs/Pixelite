@@ -76,15 +76,17 @@ class Profile extends Component {
   }
 
   renderRow(images) {
+    console.log('images: ', images);
     return images.map((image, i) => {
       return (
-        <Image key={i} style={[{margin: 0}, this.calculatedSize(images.length)]} source={{ uri: image.uri }} />
+        <Image key={i} style={[{margin: 0}, this.calculatedSize(images.length)]} source={{ uri: image.imgUri }} />
       );
     });
   }
 
-  renderImagesInGroups(images) {
-    return this.renderRandomChunk(images).map((imagesForRow, i) => {
+  renderImagesInGroups(items) {
+    console.log('items:', items);
+    return this.renderRandomChunk(items).map((imagesForRow, i) => {
       return (
         <View style={{ margin: 0, flexDirection: "row" }} key={i}>
           {this.renderRow(imagesForRow)}
@@ -97,7 +99,7 @@ class Profile extends Component {
     return (
       <View style={{ marginBottom: 25 }}>
         <View style={{ marginBottom: 6, borderRadius: 10, overflow: 'hidden' }}>
-          {this.renderImagesInGroups(story.images)}
+          {this.renderImagesInGroups(story.items)}
         </View>
         <Text style={{ color: '#565656', fontFamily: 'Avenir', fontSize: 15, fontWeight: 'bold'}}>Backpacking in Australia</Text>
         <View style={{marginTop: 4, flexDirection: "row"}}>
@@ -167,7 +169,6 @@ class Profile extends Component {
           </View>
           {this.props.stories.map((story) => {
             this.renderStories(story);
-
           })}
         </ScrollView>
       </View>

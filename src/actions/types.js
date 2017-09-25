@@ -15,3 +15,6 @@ export const PROFILE_DELETE_STORY = 'profile_delete_story';
 export const PROFILE_SHOW_MAP = 'profile_show_map';
 export const PROFILE_MAP_CHANGED = 'profile_map_changed';
 export const PROFILE_STORY_SELECTED = 'profile_story_selected';
+
+export const NEWSTORY_CREATE_STORY = 'newstory_create_story';
+export const NEWSTORY_UPDATED_STORIES = 'newstory_updated_stories';
