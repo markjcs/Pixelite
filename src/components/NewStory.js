@@ -4,34 +4,21 @@ import { Icon } from 'react-native-elements';
 import { RNS3 } from 'react-native-aws3';
 import { API_KEY, API_SECRET } from 'react-native-dotenv'
 import * as firebase from 'firebase';
-// import Exif from 'react-native-exif';
 import FloatingLabelInput from '../components/common/FloatingLabelInput';
 import { connect } from 'react-redux';
 import { newStoryCreateStory } from '../actions';
 
 const ImagePicker = NativeModules.ImageCropPicker;
-console.log(RNS3);
 
-// arn:aws:s3:::pixelite-s3bucket-dev
 const options = {
   keyPrefix: "uploads/",
-  bucket: "pixelite-s3bucket-dev",
-  region: "ap-northeast-2",
+  bucket: "pixelite-s3-oregon",
+  region: "us-west-2",
   accessKey: API_KEY,
   secretKey: API_SECRET,
   successActionStatus: 201
 }
 
-  /**
-   * {
-   *   postResponse: {
-   *     bucket: "your-bucket",
-   *     etag : "9f620878e06d28774406017480a59fd4",
-   *     key: "uploads/image.png",
-   *     location: "https://your-bucket.s3.amazonaws.com/uploads%2Fimage.png"
-   *   }
-   * }
-   */
 class NewStory extends React.Component {
   constructor(props) {
     super(props);
@@ -53,21 +40,20 @@ class NewStory extends React.Component {
   handleTextChange = newText => this.setState({ value: newText });
   saveImageToS3(uri) {
     const file = {
-      // `uri` can also be a file system path (i.e. file://)
       uri: `file://${uri}`,
-      name: `${this.state.user.uid}-${uri.slice(uri.lastIndexOf('/') + 1)}`,
+      name: `${this.state.user.uid}_AND_${uri.slice(uri.lastIndexOf('/') + 1)}`,
       type: "image/jpg"
     }
     RNS3.put(file, options).then(response => {
       if (response.status !== 201)
         throw new Error("Failed to upload image to S3");
-      console.log(response.body);
     });
   }
   saveImageDataToServer() {
     const story = {
       title: "hihihihi",
-      items: [...this.state.sendData]
+      items: [...this.state.sendData],
+      mainImgUri: this.state.sendData[0].imgUri,
     };
     this.props.newStoryCreateStory(story, this.props.user)
   }
@@ -85,16 +71,15 @@ class NewStory extends React.Component {
           return {uri: i.path, width: i.width, height: i.height, mime: i.mime};
         }),
         sendData:images.map(i => {
-          const prefix = 'https://s3.ap-northeast-2.amazonaws.com/pixelite-s3bucket-dev/uploads/'
-          const uri =  `${prefix}${this.state.user.uid}-${i.path.slice(i.path.lastIndexOf('/') + 1)}`
-          return {imgUri: uri};
+          const prefix = 'https://s3.us-west-2.amazonaws.com/pixelite-s3-oregon/uploads/'
+          const uri =  `${prefix}${this.state.user.uid}_AND_${i.path.slice(i.path.lastIndexOf('/') + 1)}`
+          return {imgUri: uri, tag:['jeju']};
         })
       });
     }).catch(e => alert(e));
   }
 
   renderImage(image) {
-    console.log(image)
     return <Image style={{width: 300, height: 300, resizeMode: 'contain'}} source={image} />
   }
 
@@ -103,8 +88,6 @@ class NewStory extends React.Component {
   }
 
   render() {
-    console.log(CameraRoll)
-    console.log(this.getPhoto)
     return (
       <View style={{ flex: 1, paddingTop: 25, backgroundColor: 'white' }}>
         <View style={{ marginLeft: 8, marginRight: 8, alignSelf: "flex-start", flexDirection: "row" }}>
@@ -129,6 +112,7 @@ class NewStory extends React.Component {
           <TouchableOpacity onPress={this.saveImageDataToServer.bind(this)}>
             <Text>Submit!</Text>
           </TouchableOpacity>
+
 
         </ScrollView>
       </View>

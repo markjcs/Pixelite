@@ -12,8 +12,15 @@ import {
   SIGNUP_USER,
   SIGNUP_USER_SUCCESS,
   SIGNUP_USER_FAIL,
+  NEWSTORY_UPDATED_STORIES_LOGIN,
 } from './types';
 
+const updateStories = (dispatch, updatedStories) => {
+  dispatch ({
+    type: NEWSTORY_UPDATED_STORIES_LOGIN,
+    payload: updatedStories,
+  });
+};
 const loginUserFail = (dispatch) => {
   dispatch({ type: LOGIN_USER_FAIL });
 };
@@ -39,17 +46,6 @@ const loginUserSuccess = (dispatch, user) => {
   // RouterComponent -> Scen key ="List"
   Actions.main();
 
-  // fetch('http://localhost:5000/downloadUserInfo', {
-  //   method: 'GET',
-  //   headers: {
-  //     'Accept': 'application/json',
-  //     'Content-Type': 'application/json',
-  //   },
-  //   body: JSON.stringify({
-  //     user: user,
-  //   })
-  // }).then(res => console.log(res)).catch(err => console.log(err));
-
   fetch('http://localhost:5000/updateUserProfile', {
     method: 'POST',
     headers: {
@@ -59,7 +55,12 @@ const loginUserSuccess = (dispatch, user) => {
     body: JSON.stringify({
       user: user,
     })
-  }).then(res => console.log("dddddddd:  ", res)).catch(err => console.log(err));
+  }).then(res => JSON.parse(res._bodyText))
+    .then(bodyText => {
+      console.log(bodyText);
+      updateStories(dispatch, bodyText.stories);
+    })
+    .catch(err => console.log(err));
 };
 
 export const emailChanged = (text) => {

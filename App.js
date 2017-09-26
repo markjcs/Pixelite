@@ -7,10 +7,12 @@ import ReduxThunk from 'redux-thunk'; // middleware
 import reducers from './src/reducers'; // getting combined reducers
 import Router from './src/Router';
 
+/* eslint-disable no-underscore-dangle */
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 const store = createStore(reducers, /* preloadedState, */ composeEnhancers(
   applyMiddleware(ReduxThunk),
 ));
+/* eslint-enable */
 class App extends Component {
   componentWillMount() {
     const config = {

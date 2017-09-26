@@ -18,3 +18,7 @@ export const PROFILE_STORY_SELECTED = 'profile_story_selected';
 
 export const NEWSTORY_CREATE_STORY = 'newstory_create_story';
 export const NEWSTORY_UPDATED_STORIES = 'newstory_updated_stories';
+
+export const NEWSTORY_UPDATED_STORIES_LOGIN = 'newstory_updated_stories_login';
+
+export const HOME_CHANGE_TEXT = 'home_change_text';

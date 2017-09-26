@@ -4,14 +4,13 @@ import {
   NEWSTORY_UPDATED_STORIES,
 } from './types';
 
-const updateStories = (dispatch, updatedStories) => {
-  console.log("ddddd");
-  console.log("updatedStories: ", updateStories);
-  dispatch ({
+const updateStory = (dispatch, updatedStory) => {
+  console.log('updatesStory: ', updatedStory);
+  dispatch({
     type: NEWSTORY_UPDATED_STORIES,
-    payload: updatedStories,
+    payload: updatedStory,
   });
-}
+};
 
 export const newStoryCreateStory = (story, user) => {
   return (dispatch) => {
@@ -25,10 +24,12 @@ export const newStoryCreateStory = (story, user) => {
       body: JSON.stringify({
         story: story,
         user: user,
-      })
+      }),
     })
-    .then(res => JSON.parse(res._bodyText))
-    .then(bodyText => updateStories(dispatch, bodyText.stories))
-    .catch(err => console.log(err));
+    .then(res => {
+      const bodyText = JSON.parse(res._bodyText);
+      console.log('createNewStory, received bodyText:', bodyText);
+      updateStory(dispatch, bodyText);
+    }).catch(err => console.log('createNewStory err!: ', err));
   };
 };

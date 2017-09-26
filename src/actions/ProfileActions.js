@@ -20,10 +20,6 @@ export const profileShowMap = (isShowing) => {
   };
 };
 
-// export const profileMapChanged = () => {
-//
-// }
-
 export const profileStorySelected = (storyId) => {
   return {
     type: PROFILE_STORY_SELECTED,

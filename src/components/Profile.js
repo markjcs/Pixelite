@@ -1,26 +1,26 @@
 import React, { Component } from "react";
+import { StyleSheet, View, ScrollView, Text, Image, Dimensions, TouchableOpacity } from "react-native";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import * as ProfileActions from '../actions';
-import { StyleSheet, View, ScrollView, Text, Image, Dimensions, TouchableOpacity } from "react-native";
 import MapView from 'react-native-maps';
 import { MapIcon, SettingIcon, CalendarIcon, LocationIcon } from './icons/Icons';
 
-const IMAGE_URLS = [
-  {uri: "https://s3.us-east-2.amazonaws.com/coderaising-cs/38824_1.jpg"},
-  // {uri: "https://forums.imore.com/attachments/photography-videography/66363d1411762006t-show-us-some-photos-taken-iphone-6-imageuploadedbyimore-forums1411762005.474797.jpg"},
-  // {uri: "https://forums.imore.com/attachments/iphone-6/66677d1411955559t-post-pictures-video-taken-your-iphone-6-imageuploadedbyimore-forums1411955558.906521.jpg"},
-  {uri: "https://forums.imore.com/attachments/photography-videography/66363d1411762006t-show-us-some-photos-taken-iphone-6-imageuploadedbyimore-forums1411762005.474797.jpg"},
-  // {uri: "http://lorempixel.com/400/400/business"},
-  {uri: "http://lorempixel.com/400/400/food"},
-  {uri: "http://lorempixel.com/400/400/nightlife"},
-  {uri: "http://lorempixel.com/400/400/people"},
-  // {uri: "http://lorempixel.com/400/400/technics"},
-  // {uri: "http://lorempixel.com/400/400/transport"},
-  // {uri: "http://lorempixel.com/400/400/sports"},
-  {uri: "http://lorempixel.com/400/400/fashion"},
-  {uri: "http://lorempixel.com/400/400/city"},
-];
+// const IMAGE_URLS = [
+//   {uri: "https://s3.us-east-2.amazonaws.com/coderaising-cs/38824_1.jpg"},
+//   // {uri: "https://forums.imore.com/attachments/photography-videography/66363d1411762006t-show-us-some-photos-taken-iphone-6-imageuploadedbyimore-forums1411762005.474797.jpg"},
+//   // {uri: "https://forums.imore.com/attachments/iphone-6/66677d1411955559t-post-pictures-video-taken-your-iphone-6-imageuploadedbyimore-forums1411955558.906521.jpg"},
+//   {uri: "https://forums.imore.com/attachments/photography-videography/66363d1411762006t-show-us-some-photos-taken-iphone-6-imageuploadedbyimore-forums1411762005.474797.jpg"},
+//   // {uri: "http://lorempixel.com/400/400/business"},
+//   {uri: "http://lorempixel.com/400/400/food"},
+//   {uri: "http://lorempixel.com/400/400/nightlife"},
+//   {uri: "http://lorempixel.com/400/400/people"},
+//   // {uri: "http://lorempixel.com/400/400/technics"},
+//   // {uri: "http://lorempixel.com/400/400/transport"},
+//   // {uri: "http://lorempixel.com/400/400/sports"},
+//   {uri: "http://lorempixel.com/400/400/fashion"},
+//   {uri: "http://lorempixel.com/400/400/city"},
+// ];
 
 const { width, height } = Dimensions.get('window');
 
@@ -57,6 +57,7 @@ class Profile extends Component {
   }
 
   renderRandomChunk(imagesArr) {
+    console.log(imagesArr)
     const array = imagesArr.slice(0);
     const length = array.length;
     const result = [];
@@ -76,10 +77,14 @@ class Profile extends Component {
   }
 
   renderRow(images) {
-    console.log('images: ', images);
     return images.map((image, i) => {
+      console.log('image.imgUri: ', image.imgUri);
       return (
-        <Image key={i} style={[{margin: 0}, this.calculatedSize(images.length)]} source={{ uri: image.imgUri }} />
+        <Image
+          key={i}
+          style={[{ margin: 0 }, this.calculatedSize(images.length)]}
+          source={{ uri: image.imgUri }}
+        />
       );
     });
   }
@@ -131,6 +136,7 @@ class Profile extends Component {
   render() {
     return (
       <View style={styles.profileScreen}>
+
         <View style={styles.profileMenu}>
           <TouchableOpacity onPress={(e) => { this.onMapIconPress(e) }}>
             <MapIcon />
@@ -168,7 +174,7 @@ class Profile extends Component {
             }
           </View>
           {this.props.stories.map((story) => {
-            this.renderStories(story);
+            return this.renderStories(story);
           })}
         </ScrollView>
       </View>
