@@ -40,7 +40,9 @@ class Home extends Component {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({ text: this.props.searchText }),
-    }).then(res => console.log(res));
+    }).then(res =>
+      this.props.showSearchedStories(JSON.parse(res._bodyText))
+    );
     this.search.clearText()
   }
 
@@ -66,12 +68,13 @@ class Home extends Component {
              showsHorizontalScrollIndicator={false}
              SeparatorComponent={() => <View style={{width: 20}} />}
              keyExtractor={(item, index) => index}
-             data={this.state.data}
-             renderItem={({ item }) => {
+             data={this.props.searchedStories}
+             renderItem={({item}) => {
+               console.log(item);
                return (
                  <View style={{display:'flex', alignItems:'center', width: (WINDOW_WIDTH) / 3}}>
                    <Image style={{width: (WINDOW_WIDTH * 0.95) / 3 , height: (WINDOW_WIDTH * 0.95) / 3 * 9 / 16, marginHorizontal:2}}
-                   source={{uri: item.imgUri}}/>
+                   source={{uri: item.mainImgUri}}/>
                    <Text>{item.title}</Text>
                  </View>
                );
@@ -123,8 +126,8 @@ class Home extends Component {
 }
 
 const mapStateToProps = ({ home }) => {
-  const { searchText } = home;
-  return { searchText };
+  const { searchText, searchedStories } = home;
+  return { searchText, searchedStories };
 };
 
 const matchDispatchToProps = dispatch =>

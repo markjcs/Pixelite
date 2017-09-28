@@ -56,7 +56,7 @@ const loginUserSuccess = (dispatch, user) => {
       user: user,
     })
   }).then(res => JSON.parse(res._bodyText))
-    .then(bodyText => {
+    .then((bodyText) => {
       console.log(bodyText);
       updateStories(dispatch, bodyText.stories);
     })
