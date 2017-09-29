@@ -70,7 +70,7 @@ class Home extends Component {
              keyExtractor={(item, index) => index}
              data={this.props.searchedStories}
              renderItem={({item}) => {
-               console.log(item);
+               console.log('get stories!', item.title);
                return (
                  <View style={{display:'flex', alignItems:'center', width: (WINDOW_WIDTH) / 3}}>
                    <Image style={{width: (WINDOW_WIDTH * 0.95) / 3 , height: (WINDOW_WIDTH * 0.95) / 3 * 9 / 16, marginHorizontal:2}}

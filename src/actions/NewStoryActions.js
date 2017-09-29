@@ -16,7 +16,8 @@ const updateStory = (dispatch, updatedStory) => {
 export const newStoryCreateStory = (story, user) => {
   return (dispatch) => {
     // dispatch({ type: NEWSTORY_CREATE_STORY });
-    fetch('http://localhost:5000/createNewStory', {
+    fetch('http://52.78.128.96:5000/createNewStory', {
+    // fetch('http://localhost:5000/createNewStory', {
       method: 'POST',
       headers: {
         'Accept': 'application/json',

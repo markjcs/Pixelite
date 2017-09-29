@@ -1,5 +1,6 @@
 import React from 'react';
-import { StyleSheet, View, ScrollView, Text, TextInput, Image, TouchableOpacity, NativeModules, CameraRoll } from 'react-native';
+import { StyleSheet, View, ScrollView, Text, TextInput, Image,
+  TouchableOpacity, NativeModules, CameraRoll } from 'react-native';
 import { Icon } from 'react-native-elements';
 import { RNS3 } from 'react-native-aws3';
 import { API_KEY, API_SECRET } from 'react-native-dotenv'

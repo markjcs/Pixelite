@@ -21,22 +21,22 @@ locations: [],
 */
 
 
-const newSotryChange = (state, action) => {
-  switch (action.type) {
-    case NEWSTORY_GET_PHOTOS:
-      return {};
-    default:
-      return state;
-  }
-};
+// const newSotryChange = (state, action) => {
+//   switch (action.type) {
+//     case NEWSTORY_GET_PHOTOS:
+//       return {};
+//     default:
+//       return state;
+//   }
+// };
 
 
 export default (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case NEWSTORY_CREATE_STORY:
       return { ...state, story: action.payload };
-    case NEWSTORY_GET_PHOTOS:
-      return { ...state, newStoryChange(state, action) };
+    // case NEWSTORY_GET_PHOTOS:
+    //   return { ...state, newStoryChange(state, action) };
     default:
       return state;
   }
