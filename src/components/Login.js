@@ -5,6 +5,7 @@ import { emailChanged, passwordChanged, loginUser, signUpUser } from '../actions
 import { Card, CardSection, Input, Button, Spinner } from './common';
 import { GoogleAuthButton } from './AuthButtons';
 
+
 const styles = {
   errorTextStyle: {
     fontSize: 16,

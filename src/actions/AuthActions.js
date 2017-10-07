@@ -46,8 +46,8 @@ const loginUserSuccess = (dispatch, user) => {
   // RouterComponent -> Scen key ="List"
   Actions.main();
 
-  fetch('http://52.78.128.96:5000/updateUserProfile', {
-  // fetch('http://localhost:5000/updateUserProfile', {
+  // fetch('http://52.78.128.96:5000/updateUserProfile', {
+  fetch('http://localhost:5000/updateUserProfile', {
     method: 'POST',
     headers: {
       'Accept': 'application/json',
